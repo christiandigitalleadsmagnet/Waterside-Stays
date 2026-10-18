@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Waterside Stays</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Short-let property inspections, inventories, photo check-in and check-out reports, and guest callouts for landlords and hosts in Fulham &amp; Chelsea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: photo-led hero, then a report-sheet motif (mono labels, tick marks) carried through services, sample report and contact. */
+:root{
+  --paper:#f5f6f3; --surface:#ffffff; --ink:#1b2629; --muted:#56646a; --line:#d9ded9;
+  --accent:#2c6a4e; --accent-ink:#ffffff; --tag:#e9c74a; --tag-ink:#2a2306; --ok:#2c6a4e; --warn:#a4561d;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Public Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --wrap:1120px; --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121a1c; --surface:#1a2427; --ink:#e7ece9; --muted:#9fb0ab; --line:#2c393c;
+  --accent:#6fbf96; --accent-ink:#0e1a14; --tag:#e9c74a; --tag-ink:#2a2306; --ok:#6fbf96; --warn:#e39a5f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121a1c; --surface:#1a2427; --ink:#e7ece9; --muted:#9fb0ab; --line:#2c393c;
+  --accent:#6fbf96; --accent-ink:#0e1a14; --tag:#e9c74a; --tag-ink:#2a2306; --ok:#6fbf96; --warn:#e39a5f; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 var(--body)}
+img{max-width:100%;display:block}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--tag);outline-offset:2px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+.label{font:500 .75rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+section{padding-block:clamp(56px,8vw,96px)}
+.section-head{display:grid;gap:12px;max-width:44rem;margin-bottom:36px}
+.section-head p{color:var(--muted)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:color-mix(in srgb, var(--paper) 92%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:21;background:var(--paper)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{font:800 1.15rem/1 var(--display);color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand-mark{width:26px;height:26px;border-radius:6px;background:var(--accent);display:grid;place-items:center}
+.brand-mark svg{width:16px;height:16px}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{color:var(--ink);text-decoration:none;font-weight:500;font-size:.95rem}
+.nav a:hover{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--accent-ink);font:600 1rem/1 var(--body);padding:14px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.nav .btn{padding:10px 18px;font-size:.92rem;color:var(--accent-ink)}
+@media (max-width:760px){.nav a:not(.btn){display:none}}
+
+/* hero */
+.hero{padding-block:clamp(36px,6vw,72px) clamp(48px,7vw,88px)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero h1{font-size:clamp(2.4rem,5.6vw,4.3rem);font-weight:800;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%, var(--tag) 62%, var(--tag) 92%, transparent 92%);color:inherit}
+.lede{font-size:1.15rem;color:var(--muted);max-width:34rem}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 18px;list-style:none;padding:0;margin:0;font-size:.95rem}
+.ticks li{display:flex;gap:8px;align-items:center}
+.ticks li::before{content:"";width:16px;height:16px;border-radius:50%;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.3l2.6 2.5L12 5.4' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;flex:none}
+.hero-photo{position:relative;min-width:0}
+.hero-photo img{width:100%;height:auto;aspect-ratio:4/3.4;object-fit:cover;border-radius:var(--radius)}
+.stamp{position:absolute;left:-14px;bottom:22px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:4px;box-shadow:0 10px 30px -12px rgb(0 0 0 / .35);max-width:calc(100% - 12px)}
+.stamp b{font:600 .95rem/1.2 var(--body)}
+.stamp .label{font-size:.68rem}
+.stamp .ok{color:var(--ok)}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.stamp{left:12px}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step;list-style:none;padding:0;margin:0}
+.steps li{display:grid;gap:10px;align-content:start;border-top:2px solid var(--ink);padding-top:18px;min-width:0}
+.steps li::before{counter-increment:step;content:"Step " counter(step);font:500 .75rem/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}
+.steps p{color:var(--muted)}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* services */
+.services{background:var(--surface);border-block:1px solid var(--line)}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line)}
+.svc{display:grid;grid-template-columns:1fr auto;gap:8px 24px;padding:26px 0;border-bottom:1px solid var(--line);min-width:0}
+.svc:nth-child(odd){padding-right:32px;border-right:1px solid var(--line)}
+.svc:nth-child(even){padding-left:32px}
+.svc p{grid-column:1 / -1;color:var(--muted)}
+.price{font:600 1.05rem/1.2 var(--body);text-align:right;white-space:nowrap}
+.price small{display:block;font:400 .75rem/1.3 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.svc ul{grid-column:1 / -1;margin:4px 0 0;padding-left:1.1em;color:var(--ink);font-size:.95rem}
+.plan{margin-top:28px;display:grid;grid-template-columns:1fr auto;gap:20px 40px;align-items:center;padding:26px 28px;border-radius:var(--radius);background:var(--paper);border:1.5px solid var(--accent)}
+.plan-copy{display:grid;gap:10px;min-width:0}
+.plan-copy ul{margin:0;padding-left:1.1em;color:var(--muted)}
+.plan-side{display:grid;gap:10px;justify-items:start;max-width:18rem}
+.plan-side .price{text-align:left;font:800 2.4rem/1 var(--display);color:var(--accent)}
+.plan-note{font-size:.9rem;color:var(--muted)}
+@media (max-width:760px){.plan{grid-template-columns:1fr;padding:22px 20px}}
+@media (max-width:760px){.svc-grid{grid-template-columns:1fr}.svc:nth-child(odd),.svc:nth-child(even){padding-left:0;padding-right:0;border-right:0}}
+
+/* sample report */
+.report{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,56px);align-items:start}
+.report-copy{display:grid;gap:16px;min-width:0}
+.report-copy p{color:var(--muted)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}
+.sheet-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.sheet-row{display:grid;grid-template-columns:132px 1fr;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.sheet-row:last-child{border-bottom:0}
+.sheet-row img{width:132px;height:100px;object-fit:cover;border-radius:6px}
+.sheet-row div{display:grid;gap:6px;align-content:start;min-width:0}
+.sheet-row .meta{font:400 .75rem/1.4 var(--mono);color:var(--muted)}
+.pill{justify-self:start;font:500 .7rem/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:5px 8px;border-radius:4px;border:1px solid currentColor}
+.pill.good{color:var(--ok)}
+.pill.note{color:var(--warn)}
+@media (max-width:860px){.report{grid-template-columns:1fr}}
+@media (max-width:440px){.sheet-row{grid-template-columns:96px 1fr}.sheet-row img{width:96px;height:80px}}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:12px}
+.gallery figure{margin:0;position:relative;overflow:hidden;border-radius:8px}
+.gallery img{width:100%;height:100%;object-fit:cover}
+.gallery figcaption{position:absolute;left:8px;bottom:8px;background:rgb(0 0 0 / .62);color:#fff;font:500 .7rem/1 var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:6px 8px;border-radius:4px}
+.gallery .wide{grid-column:span 2}
+.gallery .tall{grid-row:span 2}
+.gallery-note{margin-top:14px;font-size:.85rem;color:var(--muted)}
+@media (max-width:860px){.gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px}}
+
+/* why + area */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.why div{display:grid;gap:8px;align-content:start}
+.why p{color:var(--muted)}
+.area{margin-top:44px;padding:22px 24px;border:1px dashed var(--line);border-radius:var(--radius);display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline}
+.area strong{font:700 1.15rem/1.3 var(--display)}
+@media (max-width:760px){.why{grid-template-columns:1fr}}
+
+/* faq */
+.faq{display:grid;gap:0;border-top:1px solid var(--line);max-width:52rem}
+.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq summary{cursor:pointer;font:600 1.05rem/1.4 var(--body);list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 1.4rem/1 var(--mono);color:var(--accent)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin-top:10px;color:var(--muted);max-width:44rem}
+
+/* contact */
+.contact{background:var(--ink);color:var(--paper)}
+.contact .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(28px,5vw,64px)}
+.contact h2{color:var(--paper)}
+.contact .label{color:color-mix(in srgb, var(--paper) 70%, var(--ink))}
+.contact-copy{display:grid;gap:18px;align-content:start;min-width:0}
+.contact-copy p{color:color-mix(in srgb, var(--paper) 80%, var(--ink))}
+.contact-copy .direct{font:500 1rem/1.5 var(--mono);color:var(--paper);word-break:break-word}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px;min-width:0}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1 / -1}
+.field label{font:500 .8rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:color-mix(in srgb, var(--paper) 75%, var(--ink))}
+input,select,textarea{font:inherit;font-size:1rem;width:100%;padding:12px 14px;border-radius:8px;border:1px solid color-mix(in srgb, var(--paper) 25%, var(--ink));background:color-mix(in srgb, var(--paper) 7%, var(--ink));color:var(--paper)}
+textarea{min-height:120px;resize:vertical}
+.consent{grid-column:1 / -1;display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:color-mix(in srgb, var(--paper) 80%, var(--ink))}
+.consent input{width:18px;height:18px;margin-top:3px;flex:none}
+.consent a{color:var(--tag)}
+form .btn{grid-column:1 / -1;justify-self:start;background:var(--tag);color:var(--tag-ink)}
+.form-status{grid-column:1 / -1;font-size:.95rem;color:var(--tag);min-height:1.5em}
+@media (max-width:760px){.contact .wrap{grid-template-columns:1fr}form{grid-template-columns:1fr}}
+
+/* privacy + footer */
+.privacy{max-width:52rem;display:grid;gap:14px}
+.privacy p,.privacy li{color:var(--muted);font-size:.95rem}
+.privacy ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+footer{border-top:1px solid var(--line);padding-block:28px;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Waterside Stays home">
+      <span class="brand-mark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l3 2.9L12.5 5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      Waterside Stays
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#report">Reports</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn" href="#contact">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="label">Short-let &amp; Airbnb property care · Fulham &amp; Chelsea</p>
+        <h1>Know your property is <em>guest-ready</em> without being there.</h1>
+        <p class="lede">Independent inspections, inventories and dated photo reports for landlords and hosts. Between guests we check, photograph and report back, so damage is caught early and deposit disputes come with evidence.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#contact">Book an inspection</a>
+          <a class="btn ghost" href="#report">See a sample report</a>
+        </div>
+        <ul class="ticks">
+          <li>Report the same day</li>
+          <li>Timestamped photos</li>
+          <li>Local and on call</li>
+        </ul>
+      </div>
+      <div class="hero-photo">
+        <img src="images/bedroom.jpg" alt="Made-up double bed with grey linen next to a dark wood chest of drawers" width="1600" height="1350">
+        <div class="stamp" aria-hidden="true">
+          <span class="label">Bedroom 1 · Check-out</span>
+          <b><span class="ok">✓</span> Bed made, linen clean, no damage</b>
+          <span class="label">Photo 07 of 38</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">How it works</p>
+        <h2>One visit, one clear report.</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Tell us the dates</h3><p>Send the check-out time, the next check-in and how we get access. One-off visits or a regular slot after every stay.</p></li>
+        <li><h3>We inspect and photograph</h3><p>Every room, in the same order every time, against your own inventory. Anything broken, missing or dirty is photographed close up.</p></li>
+        <li><h3>You get the report</h3><p>A dated PDF with photos and condition notes, sent the same day. Problems that need you are flagged at the top.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">Services and prices</p>
+        <h2>Pick what your property needs.</h2>
+        <p>Pay per visit, or hand us every turnover on the Host Care plan. Per-visit prices are for a studio to two bedroom flat; larger homes are quoted individually.</p>
+      </div>
+      <div class="svc-grid">
+        <article class="svc">
+          <h3>Photo check-in &amp; check-out</h3>
+          <div class="price">£45<small>per visit</small></div>
+          <p>A room-by-room photo record before a guest arrives and after they leave, so you can compare the two and claim against damage with evidence.</p>
+        </article>
+        <article class="svc">
+          <h3>Inventory report</h3>
+          <div class="price">from £120<small>one-off</small></div>
+          <p>A full list of contents and their condition, with photos, meter readings and keys. The baseline every later inspection is checked against.</p>
+        </article>
+        <article class="svc">
+          <h3>Property inspection</h3>
+          <div class="price">£60<small>per visit</small></div>
+          <p>A mid-let or between-stays check for damage, damp, leaks, smoke alarms and wear, with anything urgent reported to you straight away.</p>
+        </article>
+        <article class="svc">
+          <h3>Guest callouts</h3>
+          <div class="price">£50<small>per callout</small></div>
+          <p>Someone local when a guest is locked out, the heating stops or the Wi-Fi drops. We go round, sort what we can and tell you what happened.</p>
+        </article>
+      </div>
+      <div class="plan">
+        <div class="plan-copy"><p class="label">Host Care plan</p><h3>15% of booking revenue, nothing to arrange per stay</h3>
+        <ul><li>Photo check-in and check-out report for every booking</li><li>Routine property inspections</li><li>Up to 2 guest callouts a month included</li></ul></div>
+        <div class="plan-side"><span class="price">15%<small>of nightly revenue</small></span><span class="plan-note">Charged on the nightly rate only, excluding cleaning fees, VAT and platform fees. Inventory reports are extra, and further callouts are £40 each. Minimum £150 in any month with bookings, nothing in months without.</span><a class="btn" href="#contact">Ask about the plan</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="report">
+    <div class="wrap report">
+      <div class="report-copy">
+        <p class="label">Sample report</p>
+        <h2>Evidence you can actually use.</h2>
+        <p>Each item is photographed, given a condition and timestamped. When a guest disputes a charge or Airbnb asks for proof, you send the page.</p>
+        <p>Reports follow the same room order every visit, so comparing this check-out to the last one takes minutes.</p>
+        <div><a class="btn" href="#contact">Ask for a full example</a></div>
+      </div>
+      <div class="sheet" role="figure" aria-label="Excerpt from a sample inspection report">
+        <div class="sheet-head"><span class="label">Check-out report · Flat 2B (example)</span><span class="label">Page 3 of 9</span></div>
+        <div class="sheet-row">
+          <img src="images/basin.jpg" alt="Close-up of a clean white basin with chrome tap" width="1600" height="1200" loading="lazy">
+          <div><b>Bathroom · Basin and vanity</b><span class="pill good">Good</span><span class="meta">Clean, no chips or limescale. Plug and waste working.</span><span class="meta">12 Oct · 11:42 · Photo 21</span></div>
+        </div>
+        <div class="sheet-row">
+          <img src="images/surface-check.jpg" alt="Top of a wooden chest of drawers photographed from above" width="1200" height="1600" loading="lazy">
+          <div><b>Bedroom 1 · Chest of drawers</b><span class="pill note">Note</span><span class="meta">Light ring mark on top surface, left of coaster. Not on inventory photo.</span><span class="meta">12 Oct · 11:49 · Photo 26</span></div>
+        </div>
+        <div class="sheet-row">
+          <img src="images/bed-detail.jpg" alt="Pillows and linen on a double bed" width="1600" height="1200" loading="lazy">
+          <div><b>Bedroom 1 · Bed and linen</b><span class="pill good">Good</span><span class="meta">Linen changed, mattress protector clean, no stains.</span><span class="meta">12 Oct · 11:51 · Photo 27</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="label">From recent visits</p>
+        <h2>The detail we look at.</h2>
+      </div>
+      <div class="gallery">
+        <figure class="wide tall"><img src="images/lounge.jpg" alt="Brown leather sofa with red, green and blue cushions" width="1600" height="1200" loading="lazy"><figcaption>Lounge</figcaption></figure>
+        <figure class="tall"><img src="images/dining.jpg" alt="Small dining table with two chairs and a table lamp" width="1200" height="1600" loading="lazy"><figcaption>Dining</figcaption></figure>
+        <figure><img src="images/bathroom.jpg" alt="Tiled bathroom with wide mirror and mosaic strip" width="1600" height="1200" loading="lazy"><figcaption>Bathroom</figcaption></figure>
+        <figure><img src="images/detail-basket.jpg" alt="Decorative basket on a wooden sideboard" width="1600" height="1200" loading="lazy"><figcaption>Fixtures</figcaption></figure>
+      </div>
+      <p class="gallery-note">Photos taken by us on inspections and shown with the owner's permission. We never publish addresses, key safes or access codes.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="why">
+        <div><p class="label">Independent</p><h3>A second pair of eyes</h3><p>We are not your cleaner, so the report is an honest record of what we found, not a sign-off on our own work.</p></div>
+        <div><p class="label">Consistent</p><h3>Same checklist, every visit</h3><p>Smoke and CO alarms, leaks, damp, appliances, linen, breakages and missing items, checked against your inventory.</p></div>
+        <div><p class="label">Discreet</p><h3>Your keys stay safe</h3><p>Access details are stored securely and never shared. We never photograph key safes, codes or guests' belongings.</p></div>
+      </div>
+      <div class="area"><span class="label">Area covered</span><strong>Fulham &amp; Chelsea · SW3, SW6, SW10</strong><span style="color:var(--muted)">Further out? Ask and we'll quote travel.</span></div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head"><p class="label">Questions</p><h2>Before you book</h2></div>
+      <div class="faq">
+        <details><summary>How quickly do I get the report?</summary><p>The same day as the visit, usually within a few hours. Anything urgent, like a leak or damage that stops the next booking, we phone or message you about straight away.</p></details>
+        <details><summary>How do you get into the property?</summary><p>By key safe, smart lock or a key we hold. You tell us the method when you book, and we keep access details private.</p></details>
+        <details><summary>Can the report be used for an Airbnb damage claim?</summary><p>Yes. Photos are dated and timestamped, and the check-in and check-out reports sit side by side, which is the evidence Airbnb's resolution process asks for.</p></details>
+        <details><summary>Do you clean or fix things?</summary><p>We inspect and report. On a guest callout we sort small problems on the spot, like resetting a boiler or the router, and arrange a tradesperson for anything bigger with your approval.</p></details>
+        <details><summary>Is there a contract?</summary><p>One-off visits need no contract. Regular clients sign a short service agreement covering visits, access, photos and payment.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="contact-copy">
+        <p class="label">Get a quote</p>
+        <h2>Tell us about your property.</h2>
+        <p>We reply within one working day with a price and the next available visit.</p>
+        <p class="label">Or email directly</p>
+        <p class="direct">kriskrosjp@gmail.com</p>
+      </div>
+      <form id="enquiry" novalidate>
+        <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="f-phone">Phone (optional)</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="f-service">Service</label>
+          <select id="f-service" name="service">
+            <option>Photo check-in &amp; check-out</option>
+            <option>Inventory report</option>
+            <option>Property inspection</option>
+            <option>Guest callouts</option>
+            <option>Host Care plan (15%)</option>
+            <option>Not sure yet</option>
+          </select></div>
+        <div class="field full"><label for="f-msg">Property and dates</label><textarea id="f-msg" name="message" placeholder="Area or postcode district, number of bedrooms, and when you need us." required></textarea></div>
+        <label class="consent" for="f-consent"><input id="f-consent" name="consent" type="checkbox" required><span>I agree to Waterside Stays using these details to reply to my enquiry, as set out in the <a href="#privacy">privacy notice</a>.</span></label>
+        <button class="btn" type="submit">Send enquiry</button>
+        <p class="form-status" id="form-status" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap"><div class="privacy">
+      <p class="label">Privacy notice</p>
+      <h2>How we use your details</h2>
+      <p>Waterside Stays ([your full name], sole trader, London) is the controller of the personal data you send us. Contact: kriskrosjp@gmail.com.</p>
+      <ul>
+        <li><b>What we collect:</b> your name, email, phone number and the property details you give us in the enquiry form or by email.</li>
+        <li><b>Why:</b> to reply to your enquiry and give you a quote. Our lawful basis is taking steps at your request before entering a contract, and your consent for the form.</li>
+        <li><b>Who sees it:</b> only us and our email and form providers (Formspree, Google (Gmail)), who process it on our behalf. We never sell it or use it for marketing without asking.</li>
+        <li><b>How long:</b> enquiries that don't become bookings are deleted after 12 months. Client records are kept for 6 years for tax purposes.</li>
+        <li><b>Your rights:</b> you can ask to see, correct or delete your data, or object to how we use it, by emailing us. You can also complain to the Information Commissioner's Office at ico.org.uk.</li>
+        <li><b>Photos:</b> inspection photos show property only, never guests. Photos used on this website are published with the owner's written consent, with addresses, key safes and codes left out.</li>
+      </ul>
+      <p>Last updated: 17 October 2026.</p>
+    </div></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Waterside Stays · Property care for short-let landlords in Fulham &amp; Chelsea</span>
+    <a href="#privacy">Privacy notice</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Set this to a Formspree (or similar) endpoint once one exists, e.g. "https://formspree.io/f/xxxxxxx".
+  var FORM_ENDPOINT = "";
+  var form = document.getElementById("enquiry");
+  var status = document.getElementById("form-status");
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      status.textContent = "Please fill in your name, a valid email, the property details and tick the consent box.";
+      return;
+    }
+    if (!FORM_ENDPOINT) {
+      status.textContent = "Thanks. The form isn't connected yet, so please email kriskrosjp@gmail.com with these details.";
+      return;
+    }
+    status.textContent = "Sending…";
+    fetch(FORM_ENDPOINT, {method:"POST", body:new FormData(form), headers:{Accept:"application/json"}})
+      .then(function(r){
+        if (!r.ok) throw new Error();
+        form.reset();
+        status.textContent = "Thanks, your enquiry has been sent. We'll reply within one working day.";
+      })
+      .catch(function(){ status.textContent = "That didn't send. Please email kriskrosjp@gmail.com instead."; });
+  });
+})();
+</script>
+</body>
+</html>
